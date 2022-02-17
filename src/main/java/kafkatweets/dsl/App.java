@@ -1,4 +1,4 @@
-package kafkatweets.Dsl;
+package kafkatweets.dsl;
 
 import java.util.Properties;
 import org.apache.kafka.streams.Topology;
@@ -14,7 +14,7 @@ class App {
 
     Properties config = new Properties();
     config.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafkatweets");
-    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     config.put(StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG, LogAndContinueExceptionHandler.class);
 
     KafkaStreams streams = new KafkaStreams(topology, config);

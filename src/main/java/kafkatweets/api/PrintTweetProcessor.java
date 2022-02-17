@@ -1,4 +1,4 @@
-package kafkatweets.ProcessorApi;
+package kafkatweets.api;
 
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.ProcessorContext;

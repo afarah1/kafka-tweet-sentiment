@@ -4,20 +4,20 @@ import com.google.gson.annotations.SerializedName;
 
 public class Tweet {
   @SerializedName("CreatedAt")
-  private Long createdAt;
+  public Long createdAt;
 
   @SerializedName("Id")
-  private Long id;
+  public Long id;
 
   @SerializedName("Lang")
-  private String lang;
+  public String lang;
 
   @SerializedName("Text")
-  private String text;
+  public String text;
 
   //@SerializedName("Retweet")
   //private Boolean retweet;
 
   @SerializedName("FollowersCount")
-  private Long followersCount;
+  public Long followersCount;
 }

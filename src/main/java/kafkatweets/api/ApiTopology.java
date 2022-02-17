@@ -1,4 +1,4 @@
-package kafkatweets.ProcessorApi;
+package kafkatweets.api;
 
 import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

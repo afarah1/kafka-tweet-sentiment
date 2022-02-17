@@ -34,10 +34,10 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'kafkatweets.Dsl.App'
+    mainClass = 'kafkatweets.dsl.App'
 }
 
 task runDSL(type: JavaExec) {
-    main = 'kafkatweets.Dsl.App'
+    main = 'kafkatweets.dsl.App'
     classpath sourceSets.main.runtimeClasspath
 }
