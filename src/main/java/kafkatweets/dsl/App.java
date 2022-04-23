@@ -6,9 +6,14 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.errors.LogAndContinueExceptionHandler;
 
+/**
+ * Performs sentiment analysis on tweets, translating to English as necessary.
+ */
 class App {
 
-  public static void main(String[] args) {
+  public static void 
+  main(String[] args) 
+  {
 
     Topology topology = TweetTopology.build();
 

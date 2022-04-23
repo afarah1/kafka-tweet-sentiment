@@ -2,6 +2,9 @@ package kafkatweets.serdes;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Represents a Tweet with only fields of interest.
+ */
 public class Tweet {
   @SerializedName("CreatedAt")
   public Long createdAt;

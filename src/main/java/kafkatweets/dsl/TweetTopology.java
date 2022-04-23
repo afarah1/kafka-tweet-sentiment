@@ -12,18 +12,38 @@ import kafkatweets.serdes.json.TweetSerdes;
 import kafkatweets.lang.TweetTranslationInterface;
 import kafkatweets.lang.DummyTweetTranslation;
 
+/**
+ * The stream processing topology for Tweets.
+ */
 class TweetTopology {
 
-  private static final String STREAM_NAME = "tweets";
+  /**
+   * The name of the stream from which we will be reading.
+   */
+  private static final String 
+  STREAM_NAME = "tweets";
 
-  public static Topology build() {
+  /**
+   * Builds a new topology with a dummy translator.
+   */
+  public static Topology 
+  build() 
+  {
     // TODO implement translation
     return build(new DummyTweetTranslation());
   }
 
-  public static Topology build(TweetTranslationInterface tweetTranslation) {
+  /**
+   * Builds a new topology with the received translator.
+   *
+   * @param tweetTranslation Object that translates tweets from other languages to English.
+   */
+  public static Topology 
+  build(TweetTranslationInterface tweetTranslation) 
+  {
+    // Build the stream using the DSL. It will read from STREAM_NAME and use
+    // our custom TweetSerdes.
     StreamsBuilder builder = new StreamsBuilder();
-
     KStream<byte[], Tweet> stream = builder.stream(
       STREAM_NAME,
       Consumed.with(Serdes.ByteArray(), new TweetSerdes())
@@ -36,20 +56,24 @@ class TweetTopology {
     //   }
     // );
 
+    // Create predicates (filter that returns a boolean) for branching English
+    // and non-English tweets.
     Predicate<byte[], Tweet> englishTweets = 
       (key, tweet) -> tweet.lang.equals("en");
-
     Predicate<byte[], Tweet> nonEnglishTweets = 
       (key, tweet) -> !tweet.lang.equals("en");
 
+    // Actually branch the stream
     KStream<byte[], Tweet>[] branches = stream.branch(englishTweets, nonEnglishTweets);
     KStream<byte[], Tweet> englishStream = branches[0];
     KStream<byte[], Tweet> nonEnglishStream = branches[1];
 
+    // Translate the non-English tweets into a new Translated stream
     KStream<byte[], Tweet> translatedStream = nonEnglishStream.mapValues(
       (tweet) -> { return tweetTranslation.translate(tweet, "en"); }
     );
 
+    // Merge the English and Translated streams
     KStream<byte[], Tweet> merged = englishStream.merge(translatedStream);
 
     // Create a new Enriched stream of sentiment analysed tweets (EntitySentiment)

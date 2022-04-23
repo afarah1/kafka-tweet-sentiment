@@ -7,5 +7,12 @@ import kafkatweets.serdes.Tweet;
  * mapValue.
  */
 public interface TweetTranslationInterface {
-  public Tweet translate(Tweet tweet, String targetLang);
+  /**
+   * Returns a new Tweet, translating the original to the target language.
+   *
+   * @param tweet The original tweet to be translated
+   * @param targetLang The target language
+   */
+  public Tweet 
+  translate(Tweet tweet, String targetLang);
 }
