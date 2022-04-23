@@ -9,11 +9,24 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+
+    // Scans src/main/avro for schemes and autogenerates Java classes from them
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.3.0'
+    // Versions < 1.0 are no longer supported and do not work with our Gradle (7.1.1)
+    // See https://github.com/davidmc24/gradle-avro-plugin/issues/158
+    // id 'com.commercehub.gradle.plugin.avro' version '0.9.1'
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+avro {
+  fieldVisibility = 'PRIVATE'
 }
 
 dependencies {
@@ -28,8 +41,15 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1-jre'
 
-    // Logging?
+    // Logging
     implementation 'org.slf4j:slf4j-simple:1.6.1'
+
+    // Required for registryless Avro
+    // We need Avro >= 1.11.0, see https://github.com/davidmc24/gradle-avro-plugin
+    implementation 'org.apache.avro:avro:1.11.0'
+
+    // required for sentiment analysis
+    implementation 'com.google.cloud:google-cloud-language:1.67.0'
 }
 
 application {

@@ -52,7 +52,21 @@ class TweetTopology {
 
     KStream<byte[], Tweet> merged = englishStream.merge(translatedStream);
 
-    merged.print(Printed.<byte[], Tweet>toSysOut().withLabel("tweets-stream"));
+    // Create a new Enriched stream of sentiment analysed tweets (EntitySentiment)
+    //KStream<byte[], EntitySentiment> enriched = merged.flatMapValues(
+    //  (tweet) -> {
+    //    // Get the sentiment analysed record
+    //    List<EntitySentiment> results = languageClient.getEntitySentiment(tweet);
+    //    // Lambda expression to filter out unknown currencies
+    //    results.removeIf(
+    //      entitySentiment -> !currencies.contains(entitySentiment.getEntity())
+    //    );
+    //    return results;
+    //  }
+    //);
+
+    merged.print(Printed.<byte[], Tweet>toSysOut().withLabel("merged-stream"));
+    //enriched.print(Printed.<byte[], EntitySentiment>toSysOut().withLabel("enriched-stream"));
 
     return builder.build();
   }
