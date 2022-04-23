@@ -59,6 +59,7 @@ application {
     mainClass = 'kafkatweets.dsl.App'
 }
 
+// For debugging see comments below on JavaCompile
 task runDSL(type: JavaExec) {
     main = 'kafkatweets.dsl.App'
     classpath sourceSets.main.runtimeClasspath
@@ -66,4 +67,18 @@ task runDSL(type: JavaExec) {
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:all' << '-Werror'
+    // You must pass -Pdebug for build as well as for other tasks
+    if (project.hasProperty('debug')) {
+      options.debug = true
+      options.compilerArgs << '-g'
+      options.debugOptions.debugLevel = 'source,lines,vars'
+      options.debugOptions.debugLevel = 'source,lines,vars'
+    } else {
+      options.debug = false
+    }
+    doLast {
+      println "Args for for $name are $options.allCompilerArgs"
+      println "debug=$options.debug"
+    }
 }
+
