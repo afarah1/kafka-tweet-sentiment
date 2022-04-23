@@ -1,6 +1,7 @@
 package kafkatweets.dsl;
 
 import java.util.Map;
+import java.util.List;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
@@ -12,8 +13,11 @@ import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.Named;
 import kafkatweets.serdes.Tweet;
 import kafkatweets.serdes.json.TweetSerdes;
+import kafkatweets.lang.TweetSentimentInterface;
+import kafkatweets.lang.DummyTweetSentiment;
 import kafkatweets.lang.TweetTranslationInterface;
 import kafkatweets.lang.DummyTweetTranslation;
+import kafkatweets.avro.EntitySentiment;
 
 /**
  * The stream processing topology for Tweets.
@@ -33,16 +37,17 @@ class TweetTopology {
   build() 
   {
     // TODO implement translation
-    return build(new DummyTweetTranslation());
+    return build(new DummyTweetTranslation(), new DummyTweetSentiment());
   }
 
   /**
    * Builds a new topology with the received translator.
    *
-   * @param tweetTranslation Object that translates tweets from other languages to English.
+   * @param translationClient Object that translates tweets from other languages to English
+   * @param sentimentClient Object that performns sentiment analysis on English tweets
    */
   public static Topology 
-  build(TweetTranslationInterface tweetTranslation) 
+  build(TweetTranslationInterface translationClient, TweetSentimentInterface sentimentClient) 
   {
     // Build the stream using the DSL. It will read from STREAM_NAME and use
     // our custom TweetSerdes.
@@ -87,27 +92,27 @@ class TweetTopology {
     // Translate the non-English tweets into a new Translated stream
     KStream<byte[], Tweet> nonEnglishStream = branched.get("lang-int");
     KStream<byte[], Tweet> translatedStream = nonEnglishStream.mapValues(
-      (tweet) -> { return tweetTranslation.translate(tweet, "en"); }
+      (tweet) -> { return translationClient.translate(tweet, "en"); }
     );
 
     // Merge the English and Translated streams
     KStream<byte[], Tweet> merged = branched.get("lang-en").merge(translatedStream);
 
     // Create a new Enriched stream of sentiment analysed tweets (EntitySentiment)
-    //KStream<byte[], EntitySentiment> enriched = merged.flatMapValues(
-    //  (tweet) -> {
-    //    // Get the sentiment analysed record
-    //    List<EntitySentiment> results = languageClient.getEntitySentiment(tweet);
-    //    // Lambda expression to filter out unknown currencies
-    //    results.removeIf(
-    //      entitySentiment -> !currencies.contains(entitySentiment.getEntity())
-    //    );
-    //    return results;
-    //  }
-    //);
+    KStream<byte[], EntitySentiment> enriched = merged.flatMapValues(
+      (tweet) -> {
+        // Get the sentiment analysed record
+        List<EntitySentiment> results = sentimentClient.getEntitiesSentiment(tweet);
+        // Lambda expression to filter out unknown currencies
+        //results.removeIf(
+        //  entitySentiment -> !currencies.contains(entitySentiment.getEntity())
+        //);
+        return results;
+      }
+    );
 
-    merged.print(Printed.<byte[], Tweet>toSysOut().withLabel("merged-stream"));
-    //enriched.print(Printed.<byte[], EntitySentiment>toSysOut().withLabel("enriched-stream"));
+    //merged.print(Printed.<byte[], Tweet>toSysOut().withLabel("merged-stream"));
+    enriched.print(Printed.<byte[], EntitySentiment>toSysOut().withLabel("enriched-stream"));
 
     return builder.build();
   }
