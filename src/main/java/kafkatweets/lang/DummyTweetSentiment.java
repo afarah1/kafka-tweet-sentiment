@@ -28,9 +28,9 @@ public class DummyTweetSentiment implements TweetSentimentInterface {
         .setId(tweet.id)
         .setEntity(entity)
         .setText(tweet.text)
-        .setSalience(0.5) // Dummy values
-        .setSentimentScore(0.5)
-        .setSentimentMagnitude(0.5)
+        .setSalience(0.5f) // Dummy values
+        .setSentimentScore(0.5f)
+        .setSentimentMagnitude(0.5f)
         .build();
       ans.add(entitySentiment);
     }

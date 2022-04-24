@@ -21,15 +21,15 @@
       },
       {
         "name": "sentiment_score",
-        "type": "double"
+        "type": "float"
       },
       {
         "name": "sentiment_magnitude",
-        "type": "double"
+        "type": "float"
       },
       {
         "name": "salience",
-        "type": "double"
+        "type": "float"
       }
     ]
   }

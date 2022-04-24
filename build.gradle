@@ -52,6 +52,9 @@ dependencies {
 
     // required for sentiment analysis
     implementation 'com.google.cloud:google-cloud-language:1.67.0'
+
+    // required for translation
+    implementation 'com.google.cloud:google-cloud-translate:1.94.5'
 }
 
 application {

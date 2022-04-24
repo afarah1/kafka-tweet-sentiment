@@ -2,6 +2,7 @@ package kafkatweets.dsl;
 
 import java.util.Map;
 import java.util.List;
+import java.util.Arrays;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
@@ -14,9 +15,9 @@ import org.apache.kafka.streams.kstream.Named;
 import kafkatweets.serdes.Tweet;
 import kafkatweets.serdes.json.TweetSerdes;
 import kafkatweets.lang.TweetSentimentInterface;
-import kafkatweets.lang.DummyTweetSentiment;
 import kafkatweets.lang.TweetTranslationInterface;
-import kafkatweets.lang.DummyTweetTranslation;
+import kafkatweets.lang.GcpTweetSentiment;
+import kafkatweets.lang.GcpTweetTranslation;
 import kafkatweets.avro.EntitySentiment;
 
 /**
@@ -31,13 +32,18 @@ class TweetTopology {
   STREAM_NAME = "tweets";
 
   /**
+   * The list of currencies whose sentiment we wish to analyse.
+   */
+  private static final List<String> 
+  currencies = Arrays.asList("bitcoin", "ethereum");
+
+  /**
    * Builds a new topology with a dummy translator.
    */
   public static Topology 
   build() 
   {
-    // TODO implement translation
-    return build(new DummyTweetTranslation(), new DummyTweetSentiment());
+    return build(new GcpTweetTranslation(), new GcpTweetSentiment());
   }
 
   /**
@@ -103,10 +109,11 @@ class TweetTopology {
       (tweet) -> {
         // Get the sentiment analysed record
         List<EntitySentiment> results = sentimentClient.getEntitiesSentiment(tweet);
-        // Lambda expression to filter out unknown currencies
-        //results.removeIf(
-        //  entitySentiment -> !currencies.contains(entitySentiment.getEntity())
-        //);
+        // Lambda expression to filter out unwanted currencies
+        // TODO could we not specify the entities in the API request?
+        results.removeIf(
+          entitySentiment -> !currencies.contains(entitySentiment.getEntity())
+        );
         return results;
       }
     );
