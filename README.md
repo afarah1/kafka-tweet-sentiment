@@ -11,7 +11,7 @@ This app works as a kafka consumer performing sentiment analysis on tweets read
 from a kafka topic named "tweets". Besides running this app you need a
 publisher to write to the topic - which is not provided here. A suggestion is
 to use a Twitter Kafka Connector such as [this
-one](https://github.com/afarah/kafka-connect-twitter) (uses Twitter4j
+one](https://github.com/afarah1/kafka-connect-twitter) (uses Twitter4j
 which only supports the 1.1 API).
 
 ## Topology
@@ -43,7 +43,7 @@ if you do not wish to use GCP.
 # Running
 
 You can use the `docker-compose.yml` provided
-[here](https://github.com/afarah/kafka-connect-twitter) to run the kafka
+[here](https://github.com/afarah1/kafka-connect-twitter) to run the kafka
 cluster. With the cluster running and the app configured, run:
 
 ```
