@@ -1,6 +1,6 @@
-package kafkatweets.serdes.json;
+package kafkatweetsentiment.serdes.json;
 
-import kafkatweets.serdes.Tweet;
+import kafkatweetsentiment.serdes.Tweet;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;

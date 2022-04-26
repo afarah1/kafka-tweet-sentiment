@@ -1,10 +1,10 @@
-package kafkatweets.lang;
+package kafkatweetsentiment.lang;
 
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.Translate.TranslateOption;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
-import kafkatweets.serdes.Tweet;
+import kafkatweetsentiment.serdes.Tweet;
 
 public class GcpTweetTranslation implements TweetTranslationInterface {
 

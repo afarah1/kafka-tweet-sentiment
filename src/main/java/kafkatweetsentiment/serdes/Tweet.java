@@ -1,4 +1,4 @@
-package kafkatweets.serdes;
+package kafkatweetsentiment.serdes;
 
 import com.google.gson.annotations.SerializedName;
 

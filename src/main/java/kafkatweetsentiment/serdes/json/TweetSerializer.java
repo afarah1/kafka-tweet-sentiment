@@ -1,6 +1,6 @@
-package kafkatweets.serdes.json;
+package kafkatweetsentiment.serdes.json;
 
-import kafkatweets.serdes.Tweet;
+import kafkatweetsentiment.serdes.Tweet;
 import com.google.gson.Gson;
 import java.nio.charset.StandardCharsets;
 import org.apache.kafka.common.serialization.Serializer;
@@ -21,7 +21,9 @@ public class TweetSerializer implements Serializer<Tweet> {
   public byte[] 
   serialize(String topic, Tweet tweet) 
   {
-    // Empty tweet is a perfectly valid input, so just return null.
+    /*
+     * Empty tweet is a perfectly valid input, so just return null.
+     */
     if (tweet == null)
       return null;
 

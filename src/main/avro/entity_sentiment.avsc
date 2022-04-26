@@ -1,5 +1,5 @@
 {
-    "namespace": "kafkatweets.avro",
+    "namespace": "kafkatweetsentiment.avro",
     "name": "EntitySentiment",
     "type": "record",
     "fields": [

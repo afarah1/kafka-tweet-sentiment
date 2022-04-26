@@ -1,4 +1,4 @@
-package kafkatweets.lang;
+package kafkatweetsentiment.lang;
 
 import com.google.cloud.language.v1.AnalyzeEntitySentimentRequest;
 import com.google.cloud.language.v1.AnalyzeEntitySentimentResponse;
@@ -9,15 +9,17 @@ import com.google.cloud.language.v1.Entity;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.LanguageServiceSettings;
 import com.google.cloud.language.v1.Sentiment;
-import kafkatweets.avro.EntitySentiment;
-import kafkatweets.serdes.Tweet;
+import kafkatweetsentiment.avro.EntitySentiment;
+import kafkatweetsentiment.serdes.Tweet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GcpTweetSentiment implements TweetSentimentInterface {
-  // TODO does the variable need to be thread-local?
-  // See https://forum.confluent.io/t/question-regarding-thread-local-variables-within-a-stream-processing-topology/4870
+  /*
+   * NLP client - this has to be thread-local, see:
+   * https://forum.confluent.io/t/question-regarding-thread-local-variables-within-a-stream-processing-topology/4870
+   */
   private static ThreadLocal<LanguageServiceClient> nlpClients =
       ThreadLocal.withInitial(
           () -> {
@@ -25,7 +27,7 @@ public class GcpTweetSentiment implements TweetSentimentInterface {
               LanguageServiceSettings settings = LanguageServiceSettings.newBuilder().build();
               LanguageServiceClient client = LanguageServiceClient.create(settings);
               return client;
-            // See https://stackoverflow.com/a/22000937/7050476
+            /* See https://stackoverflow.com/a/22000937/7050476 */
             } catch (IOException e) {
               throw new RuntimeException(e);
             }
@@ -35,7 +37,9 @@ public class GcpTweetSentiment implements TweetSentimentInterface {
   public List<EntitySentiment> 
   getEntitiesSentiment(Tweet tweet) 
   {
-    // Build the request to GCP's NLP API
+    /* 
+     * Build the request to GCP's NLP API
+     */
     Document doc = Document.newBuilder()
       .setContent(tweet.text)
       .setType(Type.PLAIN_TEXT)
@@ -44,9 +48,13 @@ public class GcpTweetSentiment implements TweetSentimentInterface {
       .setDocument(doc)
       .setEncodingType(EncodingType.UTF8)
       .build();
-    // Request the analysis and obtain the response
+    /*
+     * Request the analysis and obtain the response
+     */
     AnalyzeEntitySentimentResponse response = nlpClients.get().analyzeEntitySentiment(request);
-    // For every entity in the response, create an EntitySentiment record
+    /*
+     * For every entity in the response, create an EntitySentiment record
+     */
     List<EntitySentiment> ans = new ArrayList<>();
     for (Entity entity : response.getEntitiesList()) {
       Sentiment sentiment = entity.getSentiment();

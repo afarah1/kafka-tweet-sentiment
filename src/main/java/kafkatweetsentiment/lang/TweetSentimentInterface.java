@@ -1,8 +1,8 @@
-package kafkatweets.lang;
+package kafkatweetsentiment.lang;
 
 import java.util.List;
-import kafkatweets.serdes.Tweet;
-import kafkatweets.avro.EntitySentiment;
+import kafkatweetsentiment.serdes.Tweet;
+import kafkatweetsentiment.avro.EntitySentiment;
 
 /**
  * Tweet sentiment analysis interface to be used with Kafka Streams operations

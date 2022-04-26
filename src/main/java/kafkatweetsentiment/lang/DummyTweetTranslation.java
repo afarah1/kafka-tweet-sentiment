@@ -1,6 +1,6 @@
-package kafkatweets.lang;
+package kafkatweetsentiment.lang;
 
-import kafkatweets.serdes.Tweet;
+import kafkatweetsentiment.serdes.Tweet;
 
 /**
  * Dummy for testing purposes.

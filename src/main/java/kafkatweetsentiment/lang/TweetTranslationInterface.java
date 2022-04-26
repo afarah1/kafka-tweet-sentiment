@@ -1,6 +1,6 @@
-package kafkatweets.lang;
+package kafkatweetsentiment.lang;
 
-import kafkatweets.serdes.Tweet;
+import kafkatweetsentiment.serdes.Tweet;
 
 /**
  * Tweet translation interface to be used with Kafka Streams operations such as

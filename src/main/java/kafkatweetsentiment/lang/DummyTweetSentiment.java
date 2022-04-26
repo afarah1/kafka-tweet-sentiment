@@ -1,11 +1,10 @@
-package kafkatweets.lang;
+package kafkatweetsentiment.lang;
 
-// import java.lang.Iterable;
 import java.util.List;
 import java.util.ArrayList;
 import com.google.common.base.Splitter;
-import kafkatweets.serdes.Tweet;
-import kafkatweets.avro.EntitySentiment;
+import kafkatweetsentiment.serdes.Tweet;
+import kafkatweetsentiment.avro.EntitySentiment;
 
 /**
  * Dummy for testing purposes.
@@ -15,12 +14,14 @@ public class DummyTweetSentiment implements TweetSentimentInterface {
   public List<EntitySentiment>
   getEntitiesSentiment(Tweet tweet)
   {
-    // See https://stackoverflow.com/a/858590/7050476
-    List<EntitySentiment> ans = new ArrayList<>();  
+    /* See https://stackoverflow.com/a/858590/7050476 */
+    List<EntitySentiment> ans = new ArrayList<EntitySentiment>();  
 
-    // See:
-    // https://www.baeldung.com/java-split-string
-    // https://en.wikipedia.org/wiki/Fluent_interface
+    /*
+     * See:
+     * https://www.baeldung.com/java-split-string
+     * https://en.wikipedia.org/wiki/Fluent_interface
+     */
     Iterable<String> words = Splitter.on(' ').split(tweet.text.toLowerCase().replace("#", ""));
     for (String entity : words) {
       EntitySentiment entitySentiment = EntitySentiment.newBuilder()

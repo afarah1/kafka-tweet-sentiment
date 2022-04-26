@@ -22,9 +22,6 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
 avro {
   fieldVisibility = 'PRIVATE'
 }
@@ -59,12 +56,12 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'kafkatweets.dsl.App'
+    mainClass = 'kafkatweetsentiment.dsl.App'
 }
 
 // For debugging see comments below on JavaCompile
 task runDSL(type: JavaExec) {
-    main = 'kafkatweets.dsl.App'
+    main = 'kafkatweetsentiment.dsl.App'
     classpath sourceSets.main.runtimeClasspath
 }
 
