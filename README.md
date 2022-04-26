@@ -36,6 +36,10 @@ The kafka broker should be specified on the `SENTIMENT_BROKER_ENDPOINT`
 environment variable as `address:port`. If nothing is specified,
 `localhost:9092` is used.
 
+For GCP configuration see https://cloud.google.com/apis/docs/getting-started.
+Dummy implementations of translation and sentiment analysis are also provided
+if you do not wish to use GCP.
+
 # Running
 
 You can use the `docker-compose.yml` provided
